@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Diabetes Prediction</h1>
+        <form id="prediction-form">
+            <div class="form-group">
+                <label for="pregnancies">Pregnancies:</label>
+                <input type="number" id="pregnancies" name="pregnancies" required>
+            </div>
+            <div class="form-group">
+                <label for="glucose">Glucose:</label>
+                <input type="number" id="glucose" name="glucose" required>
+            </div>
+            <div class="form-group">
+                <label for="blood_pressure">Blood Pressure:</label>
+                <input type="number" id="blood_pressure" name="blood_pressure" required>
+            </div>
+            <div class="form-group">
+                <label for="skin_thickness">Skin Thickness:</label>
+                <input type="number" id="skin_thickness" name="skin_thickness" required>
+            </div>
+            <div class="form-group">
+                <label for="insulin">Insulin:</label>
+                <input type="number" id="insulin" name="insulin" required>
+            </div>
+            <div class="form-group">
+                <label for="bmi">BMI:</label>
+                <input type="number" id="bmi" name="bmi" step="0.1" required>
+            </div>
+            <div class="form-group">
+                <label for="diabetes_pedigree_function">Diabetes Pedigree Function:</label>
+                <input type="number" id="diabetes_pedigree_function" name="diabetes_pedigree_function" step="0.001" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+        <div id="result" class="hidden">
+            <h2>Prediction Result:</h2>
+            <p id="prediction-text"></p>
+            <p id="probability-text"></p>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
