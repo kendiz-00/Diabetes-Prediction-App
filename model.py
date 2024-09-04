@@ -3,39 +3,59 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import joblib
 
 def create_model():
-    # Load the diabetes dataset
-    data = "diabetes.csv"
-    column_names = ['pregnancies', 'glucose', 'blood_pressure', 'skin_thickness', 'insulin', 'bmi', 'diabetes_pedigree_function', 'age', 'outcome']
-    df = pd.read_csv(data, names=column_names)
+    # Load the dataset (replace with your actual dataset path)
+    data = pd.read_csv('diabetes.csv')  # Ensure the CSV file is in the same directory or provide the full path
 
-  # Prepare the features and target
-    X = df.drop('outcome', axis=1)
-    y = df['outcome']
+    # Display the first few rows to understand the dataset structure
+    print(data.head())
 
-    # Split the data
+    # Check for missing values
+    print(data.isnull().sum())
+
+    # Define features (X) and target (y)
+    X = data.drop(columns=['Outcome'])  # 'Outcome' is the target column
+    y = data['Outcome']
+
+    # Convert categorical columns to numeric using one-hot encoding, if any (not needed here as all are numeric)
+    X = pd.get_dummies(X)
+
+    # Ensure only numeric data is passed to the scaler
+    X = X.select_dtypes(include=['number'])
+
+    # Split the data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Scale the features
+    # Initialize and fit the scaler
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
-    # Train the model
-    model = LogisticRegression(random_state=42)
+    # Create and train a Logistic Regression model
+    model = LogisticRegression(max_iter=200)
     model.fit(X_train_scaled, y_train)
 
-    # Evaluate the model
-    y_pred = model.predict(X_test_scaled)
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Model accuracy: {accuracy:.2f}")
-
-    # Save the model and scaler
+    # Save the trained model and scaler
     joblib.dump(model, 'diabetes_model.joblib')
     joblib.dump(scaler, 'scaler.joblib')
 
-if __name__ == "__main__":
+    # Make predictions on the test set
+    y_pred = model.predict(X_test_scaled)
+
+    # Evaluate the model
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Model accuracy on test set: {accuracy:.2f}")
+
+    # Print classification report and confusion matrix for more detailed evaluation
+    print("Classification Report:")
+    print(classification_report(y_test, y_pred))
+
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, y_pred))
+
+# Call the function to create and test the model
+if __name__ == '__main__':
     create_model()
