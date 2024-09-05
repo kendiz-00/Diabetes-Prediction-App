@@ -3,7 +3,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, precision_score, recall_score, f1_score
 import joblib
 
 def create_model():
@@ -35,7 +36,8 @@ def create_model():
     X_test_scaled = scaler.transform(X_test)
 
     # Create and train a Logistic Regression model
-    model = LogisticRegression(max_iter=200)
+    # Train the model
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train_scaled, y_train)
 
     # Save the trained model and scaler
@@ -44,6 +46,16 @@ def create_model():
 
     # Make predictions on the test set
     y_pred = model.predict(X_test_scaled)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
+    print(f"Model performance:")
+    print(f"Accuracy: {accuracy:.2f}")
+    print(f"Precision: {precision:.2f}")
+    print(f"Recall: {recall:.2f}")
+    print(f"F1 Score: {f1:.2f}")
 
     # Evaluate the model
     accuracy = accuracy_score(y_test, y_pred)
